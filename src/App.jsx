@@ -6,24 +6,34 @@ import { client } from "./pexels";
 function App() {
   const [Getting, setGetting] = useState(null);
   const [Setting, setSetting] = useState({});
-  const handlesubmit = () => {
-    client.photos.search({ query: Getting, per_page: 30 }).then((photos) => {
+  const handlesubmit = (e) => {
+    e.preventDefault();
+    client.photos.search({ query: Getting, per_page: 52 }).then((photos) => {
       setSetting(...[photos]);
     });
   };
+
   return (
     <div className="Main">
       <div className="nav">
-        <h1>Img-searcher</h1>
-        <input
-          type="text"
-          placeholder="search here...."
-          onChange={setGetting((e) => {})}
-        />
-        <button type="submit" onClick={handlesubmit}>
-          Search
-        </button>
+        <h1 className="logo"> I M A G E - S E A R C H E R </h1>
+        <form onSubmit={handlesubmit}>
+          <input
+            type="text"
+            placeholder="search here...."
+            onChange={(e) => setGetting(() => e.target.value)}
+          />
+          <button type="submit">Search</button>
+        </form>
       </div>
+
+      {Getting && (
+        <div className="img">
+          {Setting.photos?.map((image) => (
+            <img src={image.src.small} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
